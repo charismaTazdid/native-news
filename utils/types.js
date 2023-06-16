@@ -1,0 +1,1 @@
+export const newsDataTypes = ["title", "link", "keywords", "creator", "video_url", "description", "content", "pubDate", "image_url", "source_id", "category", "country", "language"]
