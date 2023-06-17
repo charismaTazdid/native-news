@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, FlatList, View } from 'react-native';
-import { Appbar, Button, Chip, useTheme } from 'react-native-paper';
+import { Appbar, Button, Chip, MD3Colors, ProgressBar, useTheme } from 'react-native-paper';
 import NewsItem from '../components/NewsItem';
 
 const categories = ["Technology", "Sports", "Politics", "Business", "Health"];
@@ -11,6 +11,7 @@ const Home = (props) => {
     const [newsData, setNewsData] = useState([])
     const [selectedCategoris, setSelectedCategories] = useState([]);
     const [nextPage, setNextPage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSelectCategory = (category) => {
         setSelectedCategories(
@@ -23,11 +24,14 @@ const Home = (props) => {
         const url = `https://newsdata.io/api/1/news?apikey=pub_24595f40e11e57ecedd4c202382e947b9628a&country=us&language=en${selectedCategoris.length > 0 ? `&category=${selectedCategoris.join()}` : ""}${nextPage?.length > 0 ? `&page=${nextPage}` : ''}  `;
 
         try {
+            setIsLoading(true)
             await fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     setNewsData((prev) => [...prev, ...data.results])
                     setNextPage(data.nextPage)
+                    setIsLoading(false)
+
                 })
 
         } catch (error) {
@@ -73,10 +77,13 @@ const Home = (props) => {
             </View>
             {/* Chip Container End*/}
 
+            <ProgressBar indeterminate visible={isLoading} color={MD3Colors.error50} />
+
             <FlatList
                 style={styles.flatList}
                 onEndReached={() => handlePress()}
                 data={newsData}
+                keyExtractor={(item) => item.title}
                 renderItem={({ item }) => (
                     <NewsItem
                         navigation={props.navigation}
@@ -88,7 +95,7 @@ const Home = (props) => {
                         keywords={item.keywords}
                         pubDate={item.pubDate}
                         title={item.title}
-              
+
                     />)}
             />
 

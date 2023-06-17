@@ -1,1 +1,1 @@
-# native-news
+# native-news-app

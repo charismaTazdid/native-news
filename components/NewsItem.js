@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Card, useTheme } from 'react-native-paper';
+import { Button, Card, useTheme } from 'react-native-paper';
 
-const NewsItem = ({ title, content, category, description, creator, image_url, keywords, pubDate, navigation }) => {
+const NewsItem = ({ title, content, category, description, creator, image_url, keywords, pubDate, navigation, handleDelete }) => {
 
     const theme = useTheme();
 
@@ -14,9 +14,14 @@ const NewsItem = ({ title, content, category, description, creator, image_url, k
             <Card style={{ marginVertical: 10, backgroundColor: theme.colors.elevation.level5 }}>
 
                 <Card.Cover borderRadius={1} source={{ uri: image_url }} />
-                <Card.Title title={title} subtitle={description.split("\n")[0]} titleNumberOfLines={1} />
+                <Card.Title title={title} subtitle={description?.split("\n")[0]} titleNumberOfLines={1} />
 
-
+                {
+                    handleDelete &&
+                    <Card.Actions>
+                        <Button onPress={() => handleDelete(title)}>Delete</Button>
+                    </Card.Actions>
+                }
             </Card>
         </Pressable>
     )
